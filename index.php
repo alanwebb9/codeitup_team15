@@ -5,15 +5,29 @@ echo "<h3>Reconstruct Objects from a CSV data file</h3>";
 $group = array();  //empty array to contain person objects
 $dataFile = fopen("persistence/OPHospital2020.csv", "r") or die("Unable to open file!");
 $i = 0;  //index for the array
+$ignore_line=true;
+$csv = fgets($dataFile); //read a line from the CSV file
 while (!feof($dataFile)) {
-    $csv = fgets($dataFile); //read a line from the CSV file
-    if (!feof($dataFile)) { //make sure not at end
+	if ($ignore_line)
+	{
+		$ignore_line = false;
+		$csv = fgets($dataFile); //read a line from the CSV file
+		continue;
+	}
+    // if (!feof($dataFile)) { //make sure not at end
         $Properties = explode(",", $csv); //parse values to an array
-       
-        $group[$i] = new Person($Properties[0], $Properties[1], $Properties[2], $Properties[3], $Properties[4], $Properties[5], $Properties[6], $Properties[7], $Properties[8], $Properties[9]); //create new person objects
+	   
+		$total = (int)  $Properties[9];
+        $group[$i] = new Person($Properties[0], $Properties[1], $Properties[2], $Properties[3], $Properties[4], $Properties[5], $Properties[6], $Properties[7], $Properties[8], $total); //create new person objects
         $i++;
-    }
+	// }
+	$csv = fgets($dataFile); //read a line from the CSV file
 }
+
+$Properties = explode(",", $csv); //parse values to an array	   
+$total = (int)  $Properties[9];
+$group[$i] = new Person($Properties[0], $Properties[1], $Properties[2], $Properties[3], $Properties[4], $Properties[5], $Properties[6], $Properties[7], $Properties[8], $total); //create new person objects
+
 fclose($dataFile); //close the data file
 
 
@@ -53,17 +67,55 @@ fclose($dataFile); //close the data file
 // }
 
 
+
+
 function getChartData($personList)
 {
-      return array( 
-	array("label"=>"Children's Health Ireland", "y"=>64.02),
-	array("label"=>"Dublin Midlands Hospital Group", "y"=>12.55),
-	array("label"=>"Ireland East Hospital Group", "y"=>8.47),
-	array("label"=>"RCSI  Hospitals Group", "y"=>6.08),
-	array("label"=>"Saolta University Health Care Group", "y"=>4.29),
-	array("label"=>"Others", "y"=>4.59)
-);
-            
+	$totals_by_group = array();
+
+	$grand_total = 0;
+
+	for ($i =0;$i<sizeof($personList);$i++){
+		$person = $personList[$i];
+		$total=$person->get_Total();
+
+		$grand_total = $grand_total + $total;
+		
+		$total_by_group = null;
+		$total_index = -1;
+		for($j = 0; $j < sizeof($totals_by_group); $j++)
+		{
+			$total_index++;
+			if($totals_by_group[$j]["label"] == $person->get_Group())
+			{
+				$total_by_group = $totals_by_group[$j];
+			    break;
+			}
+		}
+
+		if ($total_by_group == null){
+			$new_total_by_group = array("label"=>$person->get_Group(), "y"=>$total);
+			$new_index = sizeof($totals_by_group);
+			$totals_by_group[$new_index] = $new_total_by_group;
+		}
+		else{
+			$totals_by_group[$total_index]=array("label"=>$person->get_Group(), "y"=>$total+$total_by_group["y"]);
+		}
+
+	}
+
+	
+
+	$result = array();
+	for($z = 0; $z < sizeof($totals_by_group); $z++)
+	{
+		$total_by_group = $totals_by_group[$z];
+		$label=$total_by_group["label"];
+		$value=$total_by_group["y"];
+		$result[sizeof($result)] = array( "label"=>$label, "y"=>($value/$grand_total)*100 );
+	}
+
+	return $result;
 }
 
 
