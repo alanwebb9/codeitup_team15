@@ -1,5 +1,52 @@
 <?php include("classlib/Person.php"); //include the class library?>
 
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SDYOLO</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<body>
+
+    </body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">SDYOLO</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+      
+      </li>
+      
+      
+      
+      
+      <li class="nav-item">
+       
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+</html>
+    
+
 <?php
 echo "<h3>Reconstruct Objects from a CSV data file</h3>";
 $group = array();  //empty array to contain person objects
@@ -132,10 +179,10 @@ window.onload = function() {
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 	title: {
-		text: "Usage Share of Desktop Browsers"
+		text: "Out Patient Waiting List By Group Hospital"
 	},
 	subtitles: [{
-		text: "November 2017"
+		text: "2020"
 	}],
 	data: [{
 		type: "pie",
@@ -151,6 +198,64 @@ chart.render();
 </head>
 <body>
 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+
+
+
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>
-</html>           
+ 
+
+<?php
+echo'<br>';
+echo '<table border="1" align="center" class="table-striped">';
+
+$tmp=0;
+
+    foreach ($group as $index => $person) 
+        if ($tmp++ < 20) {
+ 
+    echo '<tr><td>' . $person->get_ArchiveDate() . '</td><td>' . $person->get_Group() . '</td>' . '</td><td>' . $person->get_Hospital_Hipe() . '</td>' . '<td>' . $person->get_Hospital() . '</td>' .
+    '</td><td>' . $person->get_Speciality_Hipe1() . '</td>' .
+    '<td>' . $person->get_Speciality() . '</td>' . '</td><td>' . $person->get_Adult_Child() . '</td>' . '</td><td>' . $person->get_Age_Profile() .
+    '</td>' . '</td><td>' . $person->get_Time_Bands() . '</td>' . '</td><td>' . $person->get_Total() . '</td>';
+
+    echo '<form action="' . $_SERVER["PHP_SELF"] . '" method="post">';
+
+    echo '</form>';
+
+
+    echo '</tr>';
+}
+echo '</table>';
+
+
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Footer -->
+<footer class="page-footer font-small blue">
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2020 SDYOLO
+    
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+
+</html>    
